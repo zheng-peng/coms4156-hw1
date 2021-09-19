@@ -8,12 +8,13 @@
     <body>
 
         <div id = "gametags">
-
-            <h1>Color picked {{status}}</h1>
-            <p id = "status">{{status}}</p>
-
+            {% if status == 'yellow' or status == 'red' %}
+                <h1 id = "message">Picked Color:</h1>
+                <p id = "status">{{status}}</p>
+            {% else %}
+                <p id = "status">{{status}}</p>
+            {% endif %}
         </div>
-        
 
         <div class = "board">
             <table>

@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, jsonify
 from json import dump
 from Gameboard import Gameboard
 import db
-
+import os, sys
 
 app = Flask(__name__)
 
@@ -22,7 +22,11 @@ Initial Webpage where gameboard is initialized
 
 @app.route('/', methods=['GET'])
 def player1_connect():
-    pass
+    global game
+    game = Gameboard()
+    return render_template(
+        'player1_connect.html', status="Pick a Color."
+    )
 
 
 '''
@@ -49,7 +53,12 @@ Assign player1 their color
 
 @app.route('/p1Color', methods=['GET'])
 def player1_config():
-    pass
+    p1_color = request.args.get('color')
+    game.set_player1_color(p1_color)
+
+    return render_template(
+        'player1_connect.html', status=p1_color
+    )
 
 
 '''
@@ -64,8 +73,21 @@ Assign player2 their color
 
 @app.route('/p2Join', methods=['GET'])
 def p2Join():
-    pass
+    if game is None or game.player1 == '':
+        return "Error: Player 1 did not pick color first."
+    
+    if game.player1 == 'red':
+        p2_color = 'yellow'
+    elif game.player1 == 'yellow':
+        p2_color = 'red'
+    else:
+        return "Error: Player 1 picked an invalid color."
+    
+    game.set_player2_color(p2_color)
 
+    return render_template(
+        'p2Join.html', status=p2_color
+    )
 
 '''
 Implement '/move1' endpoint
@@ -81,7 +103,23 @@ Process Player 1's move
 
 @app.route('/move1', methods=['POST'])
 def p1_move():
-    pass
+    column = request.get_json()['column']
+    col_num = int(column[-1])
+    invalid, reason = game.move_is_invalid('p1', col_num)
+
+    if invalid is False:
+        game.perform_move('p1', col_num)
+    
+    result = {
+        'move': game.board, 
+        'invalid': invalid, 
+        'winner': game.winner
+    }
+    
+    if invalid is True:
+        result['reason'] = reason
+    
+    return result
 
 '''
 Same as '/move1' but instead proccess Player 2
@@ -90,7 +128,23 @@ Same as '/move1' but instead proccess Player 2
 
 @app.route('/move2', methods=['POST'])
 def p2_move():
-    pass
+    column = request.get_json()['column']
+    col_num = int(column[-1])
+    invalid, reason = game.move_is_invalid('p2', col_num)
+
+    if invalid is False:
+        game.perform_move('p2', col_num)
+    
+    result = {
+        'move': game.board, 
+        'invalid': invalid, 
+        'winner': game.winner
+    }
+    
+    if invalid is True:
+        result['reason'] = reason
+    
+    return result
 
 
 
