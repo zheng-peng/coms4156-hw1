@@ -55,7 +55,6 @@ Assign player1 their color
 def player1_config():
     p1_color = request.args.get('color')
     game.set_player1_color(p1_color)
-
     return render_template(
         'player1_connect.html', status=p1_color
     )

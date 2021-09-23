@@ -56,19 +56,19 @@ function move(event){
 
                     //displayBoard(data['move'])
                     if(data['winner'].length > 0){
-                        document.getElementById('status').innerHTML =  "Winner is: " + data['winner']
+                        document.getElementById('winner').innerHTML =  "Winner is: " + data['winner']
                     }
 
                     else{
-                        document.getElementById('status').innerHTML = "Error: " + data['reason']
+                        document.getElementById('error').innerHTML = "Error: " + data['reason']
                     }
                     
                 }else{
-                    document.getElementById('status').innerHTML = ""
+                    document.getElementById('error').innerHTML = ""
                     displayBoard(data['move'])
 
                     if(data['winner'].length > 0){
-                        document.getElementById('status').innerHTML = data['winner']
+                        document.getElementById('winner').innerHTML = "Winner is: " + data['winner']
                     }
                     
                 }

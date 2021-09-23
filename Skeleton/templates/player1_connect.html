@@ -10,15 +10,16 @@
         <div id = "gametags">
 
             {% if status == 'Pick a Color.'%}
-                <h1 id = "status">{{status}}</h1>
+                <h1 id = "status">Pick a Color.</h1>
                 <button onclick="pickRed()" class = "options" id = "red">red</button>
                 <button onclick="pickYellow()" class = "options" id = "yellow">yellow</button>
-            {% elif status == 'red' or status == 'yellow' %}
-                <h1 id = "message">Picked Color:</h1>
-                <p id = "status">{{status}}</p>
             {% else %}
+                <h1>Color Picked:</h1>
                 <p id = "status">{{status}}</p>
             {% endif %}
+            <p id = "error"></p>
+            <p id = "winner"></p>
+            
             <a  id = "p2Link" onclick = "hideLink()" href = '/p2Join' target="_blank">Link for player 2</a>
 
         </div>

@@ -9,11 +9,11 @@
 
         <div id = "gametags">
             {% if status == 'yellow' or status == 'red' %}
-                <h1 id = "message">Picked Color:</h1>
-                <p id = "status">{{status}}</p>
-            {% else %}
+                <h1>Color Picked:</h1>
                 <p id = "status">{{status}}</p>
             {% endif %}
+            <p id = "error"></p>
+            <p id = "winner"></p>
         </div>
 
         <div class = "board">
