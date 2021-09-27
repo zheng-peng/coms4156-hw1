@@ -1,4 +1,5 @@
-import db
+# import db
+
 
 class Gameboard():
     def __init__(self):
@@ -50,22 +51,22 @@ class Gameboard():
                 self.current_turn = 'p2'
             else:
                 self.current_turn = 'p1'
-            
+
             # after at least 7 steps, check if there is a winner
             if self.remaining_moves <= 35:
                 self.update_winner(player, row, col)
-                    
+
     def update_winner(self, player, row, col):
         if player == 'p1':
             color = self.player1
         else:
             color = self.player2
-        
+
         win_h = self.check_winner_horizontal(color, row, col)
         win_v = self.check_winner_vertical(color, row, col)
         win_d = self.check_winner_diagnal(color, row, col)
         win = win_h or win_v or win_d
-        
+
         if win is True:
             if player == 'p1':
                 self.winner = "Player 1"
@@ -87,9 +88,9 @@ class Gameboard():
             else:
                 connect = 0
             cur_col += 1
-        
+
         return False
-    
+
     def check_winner_vertical(self, color, row, col):
         board = self.board
         up = row - 3 if row - 3 >= 1 else 1
@@ -105,9 +106,9 @@ class Gameboard():
             else:
                 connect = 0
             cur_row += 1
-        
+
         return False
-            
+
     def check_winner_diagnal(self, color, row, col):
         board = self.board
         up = row - 3
@@ -118,11 +119,15 @@ class Gameboard():
         cur_row = up
         cur_col = left
         connect = 0
-        while up <= cur_row and cur_row <= down and \
-        left <= cur_col and cur_col <= right:
-            if 1 <= cur_row and cur_row <= len(board) and \
-            1 <= cur_col and cur_col <= len(board[0]) and \
-            board[cur_row - 1][cur_col - 1] == color:
+        while (
+            up <= cur_row and cur_row <= down and
+            left <= cur_col and cur_col <= right
+        ):
+            if (
+                1 <= cur_row and cur_row <= len(board) and
+                1 <= cur_col and cur_col <= len(board[0]) and
+                board[cur_row - 1][cur_col - 1] == color
+            ):
                 connect += 1
                 if connect >= 4:
                     return True
@@ -130,16 +135,20 @@ class Gameboard():
                 connect = 0
             cur_row += 1
             cur_col += 1
-        
+
         # check lower-left to upper-right
         cur_row = down
         cur_col = left
         connect = 0
-        while up <= cur_row and cur_row <= down and \
-        left <= cur_col and cur_col <= right:
-            if 1 <= cur_row and cur_row <= len(board) and \
-            1 <= cur_col and cur_col <= len(board[0]) and \
-            board[cur_row - 1][cur_col - 1] == color:
+        while (
+            up <= cur_row and cur_row <= down and
+            left <= cur_col and cur_col <= right
+        ):
+            if (
+                1 <= cur_row and cur_row <= len(board) and
+                1 <= cur_col and cur_col <= len(board[0]) and
+                board[cur_row - 1][cur_col - 1] == color
+            ):
                 connect += 1
                 if connect >= 4:
                     return True
@@ -149,6 +158,3 @@ class Gameboard():
             cur_col += 1
 
         return False
-        
-
-    

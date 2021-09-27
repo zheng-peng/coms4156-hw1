@@ -41,11 +41,11 @@ class Test_TestGameboard(unittest.TestCase):
         self.assertEqual(game.player2, 'yellow')
 
     def test_move_is_invalid_if_player_1_no_color(self):
-        # Checks if correct message is returned if player 1 has not picked a 
+        # Checks if correct message is returned if player 1 has not picked a
         # color
         game = play_game()
         self.assertEqual(
-            game.move_is_invalid('p1', 1), 
+            game.move_is_invalid('p1', 1),
             (True, 'Please pick a color first.')
         )
 
@@ -53,7 +53,7 @@ class Test_TestGameboard(unittest.TestCase):
         # Checks if correct message is returned if player 2 has not joined
         game = play_game('red')
         self.assertEqual(
-            game.move_is_invalid('p1', 1), 
+            game.move_is_invalid('p1', 1),
             (True, 'Please wait for player 2 to join.')
         )
 
@@ -71,21 +71,21 @@ class Test_TestGameboard(unittest.TestCase):
         ---------------
         '''
         moves = [
-            ['p1', 1], ['p2', 2], ['p1', 1], ['p2', 2], 
+            ['p1', 1], ['p2', 2], ['p1', 1], ['p2', 2],
             ['p1', 1], ['p2', 2], ['p1', 1]
         ]
         game = play_game('red', 'yellow', moves)
         self.assertEqual(
-            game.move_is_invalid('p1', 1), 
+            game.move_is_invalid('p1', 1),
             (True, 'Please start a new game.')
         )
 
     def test_move_is_invalid_if_not_current_turn(self):
-        # Checks if correct message is returned if the current turn does not 
+        # Checks if correct message is returned if the current turn does not
         # match
         game = play_game('red', 'yellow')
         self.assertEqual(
-            game.move_is_invalid('p2', 1), 
+            game.move_is_invalid('p2', 1),
             (True, 'Please wait for your turn.')
         )
 
@@ -103,21 +103,21 @@ class Test_TestGameboard(unittest.TestCase):
         ---------------
         '''
         moves = [
-            ['p1', 1], ['p2', 2], ['p1', 1], ['p2', 2], 
-            ['p1', 3], ['p2', 4], ['p1', 3], ['p2', 4], 
-            ['p1', 5], ['p2', 6], ['p1', 5], ['p2', 6], 
-            ['p1', 7], ['p2', 1], ['p1', 7], ['p2', 1], 
-            ['p1', 2], ['p2', 3], ['p1', 2], ['p2', 3], 
-            ['p1', 4], ['p2', 5], ['p1', 4], ['p2', 5], 
-            ['p1', 6], ['p2', 7], ['p1', 6], ['p2', 7], 
-            ['p1', 1], ['p2', 2], ['p1', 1], ['p2', 2], 
-            ['p1', 3], ['p2', 4], ['p1', 3], ['p2', 4], 
-            ['p1', 5], ['p2', 6], ['p1', 5], ['p2', 6], 
+            ['p1', 1], ['p2', 2], ['p1', 1], ['p2', 2],
+            ['p1', 3], ['p2', 4], ['p1', 3], ['p2', 4],
+            ['p1', 5], ['p2', 6], ['p1', 5], ['p2', 6],
+            ['p1', 7], ['p2', 1], ['p1', 7], ['p2', 1],
+            ['p1', 2], ['p2', 3], ['p1', 2], ['p2', 3],
+            ['p1', 4], ['p2', 5], ['p1', 4], ['p2', 5],
+            ['p1', 6], ['p2', 7], ['p1', 6], ['p2', 7],
+            ['p1', 1], ['p2', 2], ['p1', 1], ['p2', 2],
+            ['p1', 3], ['p2', 4], ['p1', 3], ['p2', 4],
+            ['p1', 5], ['p2', 6], ['p1', 5], ['p2', 6],
             ['p1', 7], ['p2', 7]
         ]
         game = play_game('red', 'yellow', moves)
         self.assertEqual(
-            game.move_is_invalid('p1', 1), 
+            game.move_is_invalid('p1', 1),
             (True, 'The game board is full.')
         )
 
@@ -135,12 +135,12 @@ class Test_TestGameboard(unittest.TestCase):
         ---------------
         '''
         moves = [
-            ['p1', 1], ['p2', 1], ['p1', 1], ['p2', 1], 
+            ['p1', 1], ['p2', 1], ['p1', 1], ['p2', 1],
             ['p1', 1], ['p2', 1]
         ]
         game = play_game('red', 'yellow', moves)
         self.assertEqual(
-            game.move_is_invalid('p1', 1), 
+            game.move_is_invalid('p1', 1),
             (True, 'The picked column is full.')
         )
 
@@ -164,7 +164,7 @@ class Test_TestGameboard(unittest.TestCase):
         self.assertEqual(game.board[5][0], 'red')
 
     def test_perform_move_result_remaining_moves(self):
-        # Checks if the number of remaining moves is correctly updated after 
+        # Checks if the number of remaining moves is correctly updated after
         # performing a move
         '''
         resulting board visualized:
@@ -217,7 +217,7 @@ class Test_TestGameboard(unittest.TestCase):
         ---------------
         '''
         moves = [
-            ['p1', 1], ['p2', 1], ['p1', 2], ['p2', 2], 
+            ['p1', 1], ['p2', 1], ['p1', 2], ['p2', 2],
             ['p1', 3], ['p2', 3]
         ]
         game = play_game('red', 'yellow', moves)
@@ -239,7 +239,7 @@ class Test_TestGameboard(unittest.TestCase):
         ---------------
         '''
         moves = [
-            ['p1', 1], ['p2', 1], ['p1', 2], ['p2', 2], 
+            ['p1', 1], ['p2', 1], ['p1', 2], ['p2', 2],
             ['p1', 3], ['p2', 3], ['p1', 5], ['p2', 4],
             ['p1', 5]
         ]
@@ -262,7 +262,7 @@ class Test_TestGameboard(unittest.TestCase):
         ---------------
         '''
         moves = [
-            ['p1', 1], ['p2', 1], ['p1', 2], ['p2', 2], 
+            ['p1', 1], ['p2', 1], ['p1', 2], ['p2', 2],
             ['p1', 3], ['p2', 3]
         ]
         game = play_game('red', 'yellow', moves)
@@ -283,7 +283,7 @@ class Test_TestGameboard(unittest.TestCase):
         ---------------
         '''
         moves = [
-            ['p1', 1], ['p2', 1], ['p1', 3], ['p2', 1], 
+            ['p1', 1], ['p2', 1], ['p1', 3], ['p2', 1],
             ['p1', 4], ['p2', 1], ['p1', 5]
         ]
         game = play_game('red', 'yellow', moves)
@@ -291,7 +291,7 @@ class Test_TestGameboard(unittest.TestCase):
         self.assertTrue(game.check_winner_vertical('yellow', 2, 1))
 
     def test_check_winner_diagnal_upper_left_to_lower_right(self):
-        # Checks if there is a winning move in diagnal direction 
+        # Checks if there is a winning move in diagnal direction
         # (upper-left to lower-right)
         '''
         resulting board visualized:
@@ -305,7 +305,7 @@ class Test_TestGameboard(unittest.TestCase):
         ---------------
         '''
         moves = [
-            ['p1', 1], ['p2', 1], ['p1', 2], ['p2', 2], 
+            ['p1', 1], ['p2', 1], ['p1', 2], ['p2', 2],
             ['p1', 4], ['p2', 3], ['p1', 3], ['p2', 1],
             ['p1', 4], ['p2', 4], ['p1', 2], ['p2', 4],
             ['p1', 1]
@@ -314,7 +314,7 @@ class Test_TestGameboard(unittest.TestCase):
         self.assertTrue(game.check_winner_diagnal('red', 3, 1))
 
     def test_check_winner_diagnal_lower_left_to_upper_right(self):
-        # Checks if there is a winning move in diagnal direction 
+        # Checks if there is a winning move in diagnal direction
         # (lower-left to upper-right)
         '''
         resulting board visualized:
@@ -328,12 +328,9 @@ class Test_TestGameboard(unittest.TestCase):
         ---------------
         '''
         moves = [
-            ['p1', 1], ['p2', 2], ['p1', 2], ['p2', 3], 
+            ['p1', 1], ['p2', 2], ['p1', 2], ['p2', 3],
             ['p1', 4], ['p2', 3], ['p1', 3], ['p2', 4],
             ['p1', 4], ['p2', 5], ['p1', 4]
         ]
         game = play_game('red', 'yellow', moves)
         self.assertTrue(game.check_winner_diagnal('red', 3, 4))
-
-
-            

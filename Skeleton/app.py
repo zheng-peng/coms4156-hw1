@@ -1,12 +1,13 @@
-from flask import Flask, render_template, request, redirect, jsonify
-from json import dump
+from flask import Flask, render_template, request, jsonify
+# from flask import redirect
+# from json import dump
 from Gameboard import Gameboard
-import db
-import os, sys
+# import db
+# import os, sys
+import logging
 
 app = Flask(__name__)
 
-import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
@@ -74,19 +75,20 @@ Assign player2 their color
 def p2Join():
     if game is None or game.player1 == '':
         return "Error: Player 1 did not pick color first."
-    
+
     if game.player1 == 'red':
         p2_color = 'yellow'
     elif game.player1 == 'yellow':
         p2_color = 'red'
     else:
         return "Error: Player 1 picked an invalid color."
-    
+
     game.set_player2_color(p2_color)
 
     return render_template(
         'p2Join.html', status=p2_color
     )
+
 
 '''
 Implement '/move1' endpoint
@@ -108,17 +110,18 @@ def p1_move():
 
     if invalid is False:
         game.perform_move('p1', col_num)
-    
+
     result = {
-        'move': game.board, 
-        'invalid': invalid, 
+        'move': game.board,
+        'invalid': invalid,
         'winner': game.winner
     }
-    
+
     if invalid is True:
         result['reason'] = reason
-    
+
     return result
+
 
 '''
 Same as '/move1' but instead proccess Player 2
@@ -133,18 +136,17 @@ def p2_move():
 
     if invalid is False:
         game.perform_move('p2', col_num)
-    
+
     result = {
-        'move': game.board, 
-        'invalid': invalid, 
+        'move': game.board,
+        'invalid': invalid,
         'winner': game.winner
     }
-    
+
     if invalid is True:
         result['reason'] = reason
-    
-    return result
 
+    return result
 
 
 if __name__ == '__main__':
