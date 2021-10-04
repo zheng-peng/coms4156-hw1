@@ -15,7 +15,7 @@ function getNewBoard(){
                 if(data['move'] != ""){
                     displayBoard(data['move'])
                     if(data['winner'].length > 0){
-                        document.getElementById('status').innerHTML = "Winner is: " + data['winner']
+                        document.getElementById('winner').innerHTML = "Winner is: " + data['winner']
                     }
 
                 }

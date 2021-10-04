@@ -71,6 +71,8 @@ def player1_config():
     p1_color = request.args.get('color')
     if game.player1 == '' and p1_color is not None:
         game.set_player1_color(p1_color)
+    if game.game_result != '':
+        redirect('/')
     return render_template(
         'player1_connect.html', status=game.player1
     )
@@ -90,6 +92,9 @@ Assign player2 their color
 def p2Join():
     if game is None or game.player1 == '':
         return "Error: Player 1 did not pick color first."
+
+    if game.game_result != '':
+        redirect('/')
 
     if game.player2 == '':
 
