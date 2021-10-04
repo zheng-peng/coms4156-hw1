@@ -223,7 +223,7 @@ class Test_TestGameboard(unittest.TestCase):
         game = play_game('red', 'yellow', moves)
         game.board[5][3] = 'red'
         game.update_winner('p1', 6, 4)
-        self.assertEqual(game.winner, 'Player 1')
+        self.assertEqual(game.game_result, 'Player 1')
 
     def test_update_winner_player2(self):
         # Checks if there is a winning move for player 2
@@ -246,7 +246,7 @@ class Test_TestGameboard(unittest.TestCase):
         game = play_game('red', 'yellow', moves)
         game.board[4][3] = 'yellow'
         game.update_winner('p2', 5, 4)
-        self.assertEqual(game.winner, 'Player 2')
+        self.assertEqual(game.game_result, 'Player 2')
 
     def test_check_winner_horizontal(self):
         # Checks if there is a winning move in horizontal direction

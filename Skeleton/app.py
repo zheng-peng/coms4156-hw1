@@ -1,8 +1,7 @@
-from flask import Flask, render_template, request, jsonify
-# from flask import redirect
-# from json import dump
+from flask import Flask, render_template, request, jsonify, redirect
+import json
 from Gameboard import Gameboard
-# import db
+import db
 # import os, sys
 import logging
 
@@ -24,12 +23,27 @@ Initial Webpage where gameboard is initialized
 @app.route('/', methods=['GET'])
 def player1_connect():
     global game
-    game = Gameboard()
+
+    move = db.get_move()
+    if move is None:
+        game = Gameboard()
+    else:
+        current_turn = move[0]
+        board = json.loads(move[1])
+        winner = move[2]
+        player1 = move[3]
+        player2 = move[4]
+        remaining_moves = move[5]
+        game = Gameboard(
+            player1, player2, board, current_turn,
+            remaining_moves, winner
+        )
+        return redirect('/p1Color')
     return render_template(
         'player1_connect.html', status="Pick a Color."
     )
 
-
+ 
 '''
 Helper function that sends to all boards don't modify
 '''
@@ -55,9 +69,10 @@ Assign player1 their color
 @app.route('/p1Color', methods=['GET'])
 def player1_config():
     p1_color = request.args.get('color')
-    game.set_player1_color(p1_color)
+    if game.player1 == '' and p1_color is not None:        
+        game.set_player1_color(p1_color)
     return render_template(
-        'player1_connect.html', status=p1_color
+        'player1_connect.html', status=game.player1
     )
 
 
@@ -76,17 +91,22 @@ def p2Join():
     if game is None or game.player1 == '':
         return "Error: Player 1 did not pick color first."
 
-    if game.player1 == 'red':
-        p2_color = 'yellow'
-    elif game.player1 == 'yellow':
-        p2_color = 'red'
-    else:
-        return "Error: Player 1 picked an invalid color."
+    if game.player2 == '':
 
-    game.set_player2_color(p2_color)
+        if game.player1 == 'red':
+            p2_color = 'yellow'
+        elif game.player1 == 'yellow':
+            p2_color = 'red'
+        else:
+            return "Error: Player 1 picked an invalid color."
+
+        game.set_player2_color(p2_color)
+
+        db.init_db()
+        add_move_to_db()
 
     return render_template(
-        'p2Join.html', status=p2_color
+        'p2Join.html', status=game.player2
     )
 
 
@@ -110,12 +130,16 @@ def p1_move():
 
     if invalid is False:
         game.perform_move('p1', col_num)
+        add_move_to_db()
 
     result = {
         'move': game.board,
         'invalid': invalid,
-        'winner': game.winner
+        'winner': game.game_result
     }
+
+    if game.game_result != '':
+        db.clear()
 
     if invalid is True:
         result['reason'] = reason
@@ -136,17 +160,40 @@ def p2_move():
 
     if invalid is False:
         game.perform_move('p2', col_num)
+        add_move_to_db()
 
     result = {
         'move': game.board,
         'invalid': invalid,
-        'winner': game.winner
+        'winner': game.game_result
     }
+
+    if game.game_result != '':
+        db.clear()
 
     if invalid is True:
         result['reason'] = reason
 
     return result
+
+
+'''
+Add move data to database
+'''
+
+
+def add_move_to_db():
+    current_turn = game.current_turn
+    board = json.dumps(game.board)
+    winner = game.game_result
+    player1 = game.player1
+    player2 = game.player2
+    remaining_moves = game.remaining_moves
+    new_move = (
+        current_turn, board, winner, player1,
+        player2, remaining_moves
+    )
+    db.add_move(new_move)
 
 
 if __name__ == '__main__':

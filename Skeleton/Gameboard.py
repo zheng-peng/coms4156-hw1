@@ -1,15 +1,18 @@
 # import db
 
-
 class Gameboard():
-    def __init__(self):
-        self.player1 = ""
-        self.player2 = ""
-        self.board = [[0 for x in range(7)] for y in range(6)]
-        self.game_result = ""
-        self.current_turn = 'p1'
-        self.remaining_moves = 42
-        self.winner = ""
+    def __init__(
+        self, player1="", player2="",
+        board=[[0 for x in range(7)] for y in range(6)],
+        current_turn="p1", remaining_moves=42,
+        game_result=""
+    ):
+        self.player1 = player1
+        self.player2 = player2
+        self.board = board
+        self.current_turn = current_turn
+        self.remaining_moves = remaining_moves
+        self.game_result = game_result
 
     def set_player1_color(self, color):
         self.player1 = color
@@ -22,7 +25,7 @@ class Gameboard():
             return True, 'Please pick a color first.'
         if self.player2 == '':
             return True, 'Please wait for player 2 to join.'
-        if self.winner != '':
+        if self.game_result != '':
             return True, 'Please start a new game.'
         if self.current_turn != player:
             return True, 'Please wait for your turn.'
@@ -69,9 +72,9 @@ class Gameboard():
 
         if win is True:
             if player == 'p1':
-                self.winner = "Player 1"
+                self.game_result = "Player 1"
             else:
-                self.winner = "Player 2"
+                self.game_result = "Player 2"
 
     def check_winner_horizontal(self, color, row, col):
         board = self.board
