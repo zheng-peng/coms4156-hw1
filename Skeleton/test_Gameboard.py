@@ -1,23 +1,40 @@
 import unittest
+import json
 from Gameboard import Gameboard
 
 
-def play_game(p1_color=None, p2_color=None, moves=None):
+def play_game(p1_color=None, p2_color=None, moves=None, state=None):
     '''
     simulate player moves
     p1_color: str, p2_color: str, moves: [['p1' or 'p2', col_num(1-based)],...]
     '''
-    game = Gameboard()
-    if p1_color is not None:
-        game.set_player1_color(p1_color)
-    if p2_color is not None:
-        game.set_player2_color(p2_color)
+    if state is None:
+        game = Gameboard()
+
+        if p1_color is not None:
+            game.set_player1_color(p1_color)
+
+        if p2_color is not None:
+            game.set_player2_color(p2_color)
+    else:
+        current_turn = state[0]
+        board = json.loads(state[1])
+        winner = state[2]
+        player1 = state[3]
+        player2 = state[4]
+        remaining_moves = state[5]
+        game = Gameboard(
+            player1, player2, board, current_turn,
+            remaining_moves, winner
+        )
+
     if moves is not None:
         for move in moves:
             player = move[0]
             col = move[1]
             invalid, reason = game.move_is_invalid(player, col)
             if invalid is True:
+                print(f'The move {move} is invalid. Reason: {reason}')
                 continue
             game.perform_move(player, col)
     return game
@@ -25,10 +42,36 @@ def play_game(p1_color=None, p2_color=None, moves=None):
 
 class Test_TestGameboard(unittest.TestCase):
 
-    def test_init(self):
-        # Checks if the game is properly initialized
+    def test_init_if_empty_state(self):
+        # Checks if the game is properly initialized if there is
+        # no previous state
         game = play_game()
         self.assertIsInstance(game, Gameboard)
+
+    def test_init_if_prev_state(self):
+        # Checks if the game is properly initialized if there is
+        # a previous state
+        game1 = play_game('red', 'yellow')
+
+        current_turn = game1.current_turn
+        board = json.dumps(game1.board)
+        winner = game1.game_result
+        player1 = game1.player1
+        player2 = game1.player2
+        remaining_moves = game1.remaining_moves
+        state = (
+            current_turn, board, winner, player1,
+            player2, remaining_moves
+        )
+
+        game2 = play_game(None, None, None, state)
+        self.assertIsInstance(game2, Gameboard)
+        self.assertEqual(game2.current_turn, game1.current_turn)
+        self.assertEqual(json.dumps(game2.board), json.dumps(game1.board))
+        self.assertEqual(game2.game_result, game1.game_result)
+        self.assertEqual(game2.player1, game1.player1)
+        self.assertEqual(game2.player2, game1.player2)
+        self.assertEqual(game2.remaining_moves, game1.remaining_moves)
 
     def test_set_player1_color(self):
         # Checks if player 1 color is properly set

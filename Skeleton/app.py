@@ -43,7 +43,7 @@ def player1_connect():
         'player1_connect.html', status="Pick a Color."
     )
 
- 
+
 '''
 Helper function that sends to all boards don't modify
 '''
@@ -69,7 +69,7 @@ Assign player1 their color
 @app.route('/p1Color', methods=['GET'])
 def player1_config():
     p1_color = request.args.get('color')
-    if game.player1 == '' and p1_color is not None:        
+    if game.player1 == '' and p1_color is not None:
         game.set_player1_color(p1_color)
     return render_template(
         'player1_connect.html', status=game.player1

@@ -3,13 +3,16 @@
 class Gameboard():
     def __init__(
         self, player1="", player2="",
-        board=[[0 for x in range(7)] for y in range(6)],
+        board=None,
         current_turn="p1", remaining_moves=42,
         game_result=""
     ):
         self.player1 = player1
         self.player2 = player2
-        self.board = board
+        if board is not None:
+            self.board = board
+        else:
+            self.board = [[0 for x in range(7)] for y in range(6)]
         self.current_turn = current_turn
         self.remaining_moves = remaining_moves
         self.game_result = game_result
@@ -43,7 +46,7 @@ class Gameboard():
 
         board = self.board
         row = len(board)
-        while row <= len(board) and board[row - 1][col - 1] != 0:
+        while row >= 1 and board[row - 1][col - 1] != 0:
             row -= 1
 
         if row >= 1:

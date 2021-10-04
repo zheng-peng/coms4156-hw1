@@ -42,7 +42,7 @@ def add_move(move):  # will take in a tuple
         player2 = move[4]
         remaining_moves = move[5]
         conn.execute(
-            'INSERT INTO GAME '
+            'INSERT INTO GAME ' +
             'VALUES (?,?,?,?,?,?);',
             (
                 current_turn, board, winner,
@@ -72,7 +72,7 @@ def get_move():
     try:
         conn = sqlite3.connect('sqlite_db')
         cur = conn.execute(
-            'SELECT * FROM GAME '
+            'SELECT * FROM GAME ' +
             'ORDER BY remaining_moves limit 1;'
         )
         row = cur.fetchone()
