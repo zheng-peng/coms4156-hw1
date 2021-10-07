@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import json
 from Gameboard import Gameboard
 import db
@@ -22,23 +22,11 @@ Initial Webpage where gameboard is initialized
 
 @app.route('/', methods=['GET'])
 def player1_connect():
-    global game
-
     move = db.get_move()
-    if move is None:
-        game = Gameboard()
-    else:
-        current_turn = move[0]
-        board = json.loads(move[1])
-        winner = move[2]
-        player1 = move[3]
-        player2 = move[4]
-        remaining_moves = move[5]
-        game = Gameboard(
-            player1, player2, board, current_turn,
-            remaining_moves, winner
-        )
-        return redirect('/p1Color')
+    if move is not None:
+        db.clear()
+    global game
+    game = Gameboard()
     return render_template(
         'player1_connect.html', status="Pick a Color."
     )
@@ -68,11 +56,33 @@ Assign player1 their color
 
 @app.route('/p1Color', methods=['GET'])
 def player1_config():
-    p1_color = request.args.get('color')
-    if game.player1 == '' and p1_color is not None:
-        game.set_player1_color(p1_color)
-    if game.game_result != '':
-        redirect('/')
+    move = db.get_move()
+    global game
+    if game is None:
+        if move is not None:
+            # existing state
+            current_turn = move[0]
+            board = json.loads(move[1])
+            winner = move[2]
+            player1 = move[3]
+            player2 = move[4]
+            remaining_moves = move[5]
+            game = Gameboard(
+                player1, player2, board, current_turn,
+                remaining_moves, winner
+            )
+        else:
+            # empty state with no existing game
+            return redirect(url_for('player1_connect'))
+    else:
+        # empty state with an existing game
+        p1_color = request.args.get('color')
+        if game.player1 == '' and p1_color is not None:
+            game.set_player1_color(p1_color)
+
+    if game.player1 == '' or game.game_result != '':
+        return redirect(url_for('player1_connect'))
+
     return render_template(
         'player1_connect.html', status=game.player1
     )
@@ -94,7 +104,7 @@ def p2Join():
         return "Error: Player 1 did not pick color first."
 
     if game.game_result != '':
-        redirect('/')
+        return redirect(url_for('player1_connect'))
 
     if game.player2 == '':
 
